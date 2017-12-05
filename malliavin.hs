@@ -15,10 +15,7 @@ coin_toss_expansion :: Int -> Double -> Double
 coin_toss_expansion n xi = sum (take n $ 0.5 : zipWith (*) fn (second $ hermite xi))
     where fn = 1.0 / (sqrt $ 2 * pi) : zipWith ( \fn1 k -> -fn1 * k / ((k + 1) * (k + 2)) ) fn [1, 3..]
 
-rounded_coin_toss_expansion :: Int -> Double -> Int
-rounded_coin_toss_expansion n xi = round $ coin_toss_expansion n xi
-
 coin_toss_sequence :: Int -> RVar [Int]
-coin_toss_sequence n = replicateM n $ liftM (rounded_coin_toss_expansion 100) (stdNormal)
+coin_toss_sequence n = replicateM n $ liftM (round.coin_toss_expansion 100) (stdNormal)
 
 main = sample $ coin_toss_sequence 20
